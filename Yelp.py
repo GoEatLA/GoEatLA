@@ -11,6 +11,16 @@ auth = Oauth1Authenticator(consumer_key=CONSUMER_KEY, consumer_secret=CONSUMER_S
                            token=TOKEN, token_secret=TOKEN_SECRET)
 client = Client(auth)
 
-resp = client.search("Los Angeles")
-for business in resp:
-    print(business)
+resp = client.search("Los Angeles").businesses
+
+dicts_to_output = [
+    {
+        'name': biz.name,
+        'id': biz.id,
+        'rating': biz.rating,
+        'review_count':biz.review_count
+    }
+    for biz in resp
+]
+
+print(dicts_to_output)
