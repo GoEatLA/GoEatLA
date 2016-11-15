@@ -12,4 +12,5 @@ auth = Oauth1Authenticator(consumer_key=CONSUMER_KEY, consumer_secret=CONSUMER_S
 client = Client(auth)
 
 resp = client.search("Los Angeles")
-print(resp)
+for business in resp:
+    print(business)
