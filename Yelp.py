@@ -12,16 +12,18 @@ class YelpSearch:
                                token=TOKEN, token_secret=TOKEN_SECRET)
     client = Client(auth)
 
-    resp = client.search("Los Angeles").businesses
+    resp = client.search("San Franciso").businesses
 
     dicts_to_output = [
         {
             'name': biz.name,
             'id': biz.id,
             'rating': biz.rating,
-            'review_count':biz.review_count
+            'review_count': biz.review_count,
+            'location': biz.location.display_address,
         }
         for biz in resp
+
     ]
 
     print(dicts_to_output)
