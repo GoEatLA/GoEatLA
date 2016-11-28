@@ -23,10 +23,13 @@ class GoEatLA:
 		"""Continuously post on twitter"""
 		while True:
 			places = self.yelp.searchPlace("Los Angeles")
-			rng = random.randint(0,len(places))
+			rng = random.randint(0,len(places) - 1)
 			location = map(lambda x: x.encode('ascii'), places[rng]['location'])
 			address = ' '.join(location)
-			tweeter.updateMsg(address)
+			name = places[rng]['name']
+			tweeter.updateMsg(name + " at " + address)
+			#Send 'address' info to google api
 			time.sleep(self.minutes)
+
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
