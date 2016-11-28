@@ -38,7 +38,7 @@ class GoEatLA:
 		otherTweets = tweeter.get_mentions()
 		print(otherTweets)
 
-		places = self.yelp.searchStuff("Los Angeles", otherTweets[0][1])
+		places = self.yelp.searchStuff(random.choice(self.subarea), otherTweets[0][1])
 
 		#not working paramter search I think
 		print(places[0]['name'])
