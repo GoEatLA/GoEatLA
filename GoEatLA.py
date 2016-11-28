@@ -10,10 +10,9 @@ import json
 
 class GoEatLA:
 	
-	def __init__(self, yelp, posttime = 3, readtime = 30):
-	#def __init__(self, minutes = 3):
+	def __init__(self, yelp, posttime = 30, readtime = 30):
 		self.yelp = yelp
-		self.posttime = posttime #* 60
+		self.posttime = posttime
 		self.readtime = readtime
 		self.subarea = ['Antelope Valley', 'Agoura Hills', 'Alhambra', 'Arcadia', 'Baldwin Park',
 		'Beverly Hills', 'Boyle Heights', 'Burbank', 'Calabasas', 'Cerritos', 'Claremont', 'Compton', 'Culver City', 
@@ -74,8 +73,8 @@ class GoEatLA:
 
 	def run(self):
 		"""Continuously post on twitter and wait for response"""
-		#self.makeTweets()
+		self.makeTweets()
 		self.getTweets()
 
-goEatLA = GoEatLA(Yelp.YelpSearch(),30)
+goEatLA = GoEatLA(Yelp.YelpSearch(),45)
 goEatLA.run()
