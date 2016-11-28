@@ -11,6 +11,15 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+previous = []
+
+def get_previous():
+	return previous
+
+def set_previous(aList):
+	global previous
+	previous = aList[:]
+
 
 def updateMsg(tweet):
 	api.update_status(tweet)
@@ -21,7 +30,8 @@ def get_mentions():
 	with open("last_id.txt", "r") as f:
 		last_id = f.readline()
 
-	for a in api.mentions_timeline(since_id = last_id):
+	newTweets = api.mentions_timeline(since_id = last_id)
+	for a in newTweets:
 		last_id = str(a.id)
 		f = open("last_id.txt", "w")
 		f.close()
@@ -29,4 +39,6 @@ def get_mentions():
 		f.write(last_id)
 		f.close()
 		tweets.append((a.user.screen_name, a.text[9:]))
+
+	set_previous(tweets)
 	return tweets

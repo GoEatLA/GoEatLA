@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import threading
-import time
+import datetime
 import Yelp
 import tweeter
 import random
@@ -35,15 +35,22 @@ class GoEatLA:
 		tweeter.updateMsg(name + " at " + googlelink)
 		threading.Timer(self.posttime, self.makeTweets).start()
 
-	def getTweets(self, prev):
+	def getTweets(self):
 
+		prev = tweeter.get_previous()
 		otherTweets = tweeter.get_mentions()
+		print("New:", otherTweets)
 		if len(prev) != 0:
-			otherTweets = list(set(prev) ^ set(otherTweets))
+			simplifiedTweets = list(set(otherTweets) - set(prev))
+		else:
+			simplifiedTweets = otherTweets[:]
 
-		print(otherTweets)
+		print("Previous:", prev)
+		print("now", simplifiedTweets)
 
-		for person in otherTweets:
+		print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+		for person in simplifiedTweets:
 			places = self.yelp.searchStuff(random.choice(self.subarea), person[1])
 			rng = random.randint(0, len(places) - 1)
 			address = ' '.join(places[rng]['location'])
@@ -55,7 +62,7 @@ class GoEatLA:
 			except tweeter.error.TweepyError as err:
 				print (err)
 
-		threading.Timer(self.readtime, self.getTweets(otherTweets)).start()
+		threading.Timer(self.readtime, self.getTweets).start()
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
@@ -67,8 +74,8 @@ class GoEatLA:
 
 	def run(self):
 		"""Continuously post on twitter and wait for response"""
-		self.makeTweets()
-		self.getTweets([])
+		#self.makeTweets()
+		self.getTweets()
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
 goEatLA.run()
