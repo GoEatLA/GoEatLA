@@ -10,10 +10,11 @@ import json
 
 class GoEatLA:
 	
-	def __init__(self, yelp, minutes = 3):
+	def __init__(self, yelp, posttime = 3, readtime = 30):
 	#def __init__(self, minutes = 3):
 		self.yelp = yelp
-		self.minutes = minutes #* 60
+		self.posttime = posttime #* 60
+		self.readtime = readtime
 		self.subarea = ['Antelope Valley', 'Agoura Hills', 'Alhambra', 'Arcadia', 'Baldwin Park',
 		'Beverly Hills', 'Boyle Heights', 'Burbank', 'Calabasas', 'Cerritos', 'Claremont', 'Compton', 'Culver City', 
 		'Downtown, Los Angeles', 'El Monte', 'Hacienda Heights', 'Griffith Park', 'Koreatown', 'Inglewood', 'Lancaster', 'Malibu', 'Marina del Rey',
@@ -32,7 +33,7 @@ class GoEatLA:
 		name = places[rng]['name']
 		googlelink = self.goo_shorten_url(address)
 		tweeter.updateMsg(name + " at " + googlelink)
-		threading.Timer(self.minutes, self.makeTweets).start()
+		threading.Timer(self.posttime, self.makeTweets).start()
 
 	def getTweets(self):
 		otherTweets = tweeter.get_mentions()
@@ -46,6 +47,8 @@ class GoEatLA:
 			googlelink = self.goo_shorten_url(address)
 			replyTo = "@%s"% person[0]
 			tweeter.updateMsg(replyTo + " " + name + " at " + googlelink)
+
+		threading.Timer(self.readtime, self.getTweets).start()
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'

@@ -17,6 +17,16 @@ def updateMsg(tweet):
 
 def get_mentions():
 	tweets = []
-	for a in api.mentions_timeline():
+
+	with open("last_id.txt", "r") as f:
+		last_id = f.readline()
+
+	for a in api.mentions_timeline(since_id = last_id):
+		last_id = str(a.id)
+		f = open("last_id.txt", "w")
+		f.close()
+		f = open("last_id.txt", "w")
+		f.write(last_id)
+		f.close()
 		tweets.append((a.user.screen_name, a.text[9:]))
 	return tweets
