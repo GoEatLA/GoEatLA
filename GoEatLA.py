@@ -60,7 +60,7 @@ class GoEatLA:
 
 	def run(self):
 		"""Continuously post on twitter and wait for response"""
-		#self.makeTweets()
+		self.makeTweets()
 		self.getTweets()
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
