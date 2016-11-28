@@ -12,24 +12,12 @@ class YelpSearch:
                                token=TOKEN, token_secret=TOKEN_SECRET)
     client = Client(auth)
 
-    def searchPlace(self, place):
-        resp = self.client.search(place).businesses
+    def searchStuff(self, place, stuff = None):
 
-        dicts_to_output = [
-            {
-                'name': biz.name,
-                'id': biz.id,
-                'rating': biz.rating,
-                'review_count': biz.review_count,
-                'location': biz.location.display_address,
-            }
-            for biz in resp
-        ]
-
-        return dicts_to_output
-
-    def searchStuff(self, place, stuff):
-        resp = self.client.search(place, stuff).businesses
+        if (stuff == None):
+            resp = self.client.search(place).businesses
+        else:
+            resp = self.client.search(place, term=stuff).businesses
 
         dicts_to_output = [
             {

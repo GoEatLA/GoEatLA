@@ -21,7 +21,7 @@ class GoEatLA:
 		'Van Nuys', 'Venice', 'West Hollywood', 'West Covina', 'Westlake']
 
 	def makeTweets(self):
-		places = self.yelp.searchPlace(random.choice(self.subarea))
+		places = self.yelp.searchStuff(random.choice(self.subarea))
 		rng = random.randint(0, len(places) - 1)
 
 		# Python 2 only
@@ -38,11 +38,14 @@ class GoEatLA:
 		otherTweets = tweeter.get_mentions()
 		print(otherTweets)
 
-		places = self.yelp.searchStuff(random.choice(self.subarea), otherTweets[0][1])
-
-		#not working paramter search I think
-		print(places[0]['name'])
-
+		for person in otherTweets:
+			places = self.yelp.searchStuff(random.choice(self.subarea), person[1])
+			rng = random.randint(0, len(places) - 1)
+			address = ' '.join(places[rng]['location'])
+			name = places[rng]['name']
+			googlelink = self.goo_shorten_url(address)
+			replyTo = "@%s"% person[0]
+			tweeter.updateMsg(replyTo + " " + name + " at " + googlelink)
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
