@@ -35,8 +35,12 @@ class GoEatLA:
 		tweeter.updateMsg(name + " at " + googlelink)
 		threading.Timer(self.posttime, self.makeTweets).start()
 
-	def getTweets(self):
+	def getTweets(self, prev):
+
 		otherTweets = tweeter.get_mentions()
+		if len(prev) != 0:
+			otherTweets = list(set(prev) ^ set(otherTweets))
+
 		print(otherTweets)
 
 		for person in otherTweets:
@@ -46,9 +50,12 @@ class GoEatLA:
 			name = places[rng]['name']
 			googlelink = self.goo_shorten_url(address)
 			replyTo = "@%s"% person[0]
-			tweeter.updateMsg(replyTo + " " + name + " at " + googlelink)
+			try:
+				tweeter.updateMsg(replyTo + " " + name + " at " + googlelink)
+			except tweeter.error.TweepyError as err:
+				print (err)
 
-		threading.Timer(self.readtime, self.getTweets).start()
+		threading.Timer(self.readtime, self.getTweets(otherTweets)).start()
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
@@ -61,7 +68,7 @@ class GoEatLA:
 	def run(self):
 		"""Continuously post on twitter and wait for response"""
 		self.makeTweets()
-		self.getTweets()
+		self.getTweets([])
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
 goEatLA.run()
