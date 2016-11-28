@@ -32,7 +32,7 @@ class GoEatLA:
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
-		longurl = 'http://www.google.com/maps/dir/Current+Location/' + address
+		longurl = 'http://www.google.com/maps/dir//' + address
 		payload = {'longUrl' : longurl}
 		headers = {'content-type' : 'application/json'}
 		r = requests.post(post_url, data=json.dumps(payload), headers=headers)
