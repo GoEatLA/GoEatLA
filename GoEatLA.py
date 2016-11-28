@@ -4,6 +4,7 @@ import threading
 import time
 import Yelp
 import tweeter
+import random
 
 
 class GoEatLA:
@@ -20,15 +21,12 @@ class GoEatLA:
 
 	def run(self):
 		"""Continuously post on twitter"""
-		# while True:
-		# 	print(yelp.searchPlace("Los Angeles"))
-		# 	tweeter.updateMsg("Hello Testing!")
-		# 	time.sleep(self.minutes)
-		print(yelp.searchPlace("Los Angeles"))
-		tweeter.updateMsg("Hello Testing!")
-		time.sleep(self.minutes)
+		while True:
+			places = self.yelp.searchPlace("Los Angeles")
+			rng = random.randint(0,len(places))
+			location = map(lambda x: x.encode('ascii'), places[rng]['location'])
+			address = ' '.join(location)
+			tweeter.updateMsg(address)
+			time.sleep(self.minutes)
 
-
-yelp = Yelp.YelpSearch()
-
-goEatLA = GoEatLA(yelp,30)
+goEatLA = GoEatLA(Yelp.YelpSearch(),30)

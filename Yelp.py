@@ -26,5 +26,4 @@ class YelpSearch:
             for biz in resp
         ]
 
-        print(dicts_to_output)
         return dicts_to_output

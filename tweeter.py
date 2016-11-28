@@ -14,4 +14,3 @@ api = tweepy.API(auth)
 
 def updateMsg(tweet):
 	api.update_status(tweet)
-#api.update_status("IMA BOT BITCH")
