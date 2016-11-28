@@ -5,7 +5,8 @@ import time
 import Yelp
 import tweeter
 import random
-
+import requests
+import json
 
 class GoEatLA:
 	
@@ -18,6 +19,13 @@ class GoEatLA:
 		t.daemon = True
 		t.start()
 
+	def goo_shorten_url(address):
+		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
+		longurl = 'http://maps.google.com/?q=' + address
+		payload = {'longUrl' : longurl}
+		headers = {'content-type' : 'application/json'}
+		r = requests.post(post_url, data=json.dumps(payload), headers=headers)
+		return r.json()['id']
 
 	def run(self):
 		"""Continuously post on twitter"""
@@ -27,7 +35,8 @@ class GoEatLA:
 			location = map(lambda x: x.encode('ascii'), places[rng]['location'])
 			address = ' '.join(location)
 			name = places[rng]['name']
-			tweeter.updateMsg(name + " at " + address)
+			googlelink = self.goo_shorten_url(address)
+			tweeter.updateMsg(name + " at " + googlelink)
 			#Send 'address' info to google api
 			time.sleep(self.minutes)
 
