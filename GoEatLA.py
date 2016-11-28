@@ -15,11 +15,22 @@ class GoEatLA:
 		self.yelp = yelp
 		self.minutes = minutes #* 60
 
-		t = threading.Thread(target = self.run)
-		t.daemon = True
-		t.start()
+	def makeTweets(self):
+		places = self.yelp.searchPlace("Los Angeles")
+		rng = random.randint(0, len(places) - 1)
 
-	def goo_shorten_url(address):
+		# Python 2 only
+		# location = map(lambda x: x.encode('ascii'), places[rng]['location'])
+		# address = ' '.join(location)
+
+		address = ' '.join(places[rng]['location'])
+		name = places[rng]['name']
+		googlelink = self.goo_shorten_url(address)
+		tweeter.updateMsg(name + " at " + googlelink)
+		threading.Timer(self.minutes, self.makeTweets).start()
+
+
+	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
 		longurl = 'http://www.google.com/maps/dir/Current+Location/' + address
 		payload = {'longUrl' : longurl}
@@ -28,17 +39,8 @@ class GoEatLA:
 		return r.json()['id']
 
 	def run(self):
-		"""Continuously post on twitter"""
-		while True:
-			places = self.yelp.searchPlace("Los Angeles")
-			rng = random.randint(0,len(places) - 1)
-			location = map(lambda x: x.encode('ascii'), places[rng]['location'])
-			address = ' '.join(location)
-			name = places[rng]['name']
-			googlelink = self.goo_shorten_url(address)
-			tweeter.updateMsg(name + " at " + googlelink)
-			#Send 'address' info to google api
-			time.sleep(self.minutes)
-
+		"""Continuously post on twitter and wait for response"""
+		self.makeTweets()
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
+goEatLA.run()
