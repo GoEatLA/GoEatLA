@@ -14,9 +14,14 @@ class GoEatLA:
 	#def __init__(self, minutes = 3):
 		self.yelp = yelp
 		self.minutes = minutes #* 60
+		self.subarea = ['Antelope Valley', 'Agoura Hills', 'Alhambra', 'Arcadia', 'Baldwin Park',
+		'Beverly Hills', 'Boyle Heights', 'Burbank', 'Calabasas', 'Cerritos', 'Claremont', 'Compton', 'Culver City', 
+		'Downtown, Los Angeles', 'El Monte', 'Hacienda Heights', 'Griffith Park', 'Koreatown', 'Inglewood', 'Lancaster', 'Malibu', 'Marina del Rey',
+		'North Hollywood', 'Pasadena', 'Pomona', 'Redondo Beach', 'Rowland Heights', 'Santa Monica', 'Studio City', 'Torrance',
+		'Van Nuys', 'Venice', 'West Hollywood', 'West Covina', 'Westlake']
 
 	def makeTweets(self):
-		places = self.yelp.searchPlace("Los Angeles")
+		places = self.yelp.searchPlace(random.choice(self.subarea))
 		rng = random.randint(0, len(places) - 1)
 
 		# Python 2 only
