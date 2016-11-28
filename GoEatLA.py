@@ -29,6 +29,15 @@ class GoEatLA:
 		tweeter.updateMsg(name + " at " + googlelink)
 		threading.Timer(self.minutes, self.makeTweets).start()
 
+	def getTweets(self):
+		otherTweets = tweeter.get_mentions()
+		print(otherTweets)
+
+		places = self.yelp.searchStuff("Los Angeles", otherTweets[0][1])
+
+		#not working paramter search I think
+		print(places[0]['name'])
+
 
 	def goo_shorten_url(self, address):
 		post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAMjzI6DES-ntXZk-cC448DMDE3tnxaUiQ'
@@ -40,7 +49,8 @@ class GoEatLA:
 
 	def run(self):
 		"""Continuously post on twitter and wait for response"""
-		self.makeTweets()
+		#self.makeTweets()
+		self.getTweets()
 
 goEatLA = GoEatLA(Yelp.YelpSearch(),30)
 goEatLA.run()

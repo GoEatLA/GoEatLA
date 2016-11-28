@@ -27,3 +27,19 @@ class YelpSearch:
         ]
 
         return dicts_to_output
+
+    def searchStuff(self, place, stuff):
+        resp = self.client.search(place, stuff).businesses
+
+        dicts_to_output = [
+            {
+                'name': biz.name,
+                'id': biz.id,
+                'rating': biz.rating,
+                'review_count': biz.review_count,
+                'location': biz.location.display_address,
+            }
+            for biz in resp
+        ]
+
+        return dicts_to_output

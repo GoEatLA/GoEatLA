@@ -14,3 +14,10 @@ api = tweepy.API(auth)
 
 def updateMsg(tweet):
 	api.update_status(tweet)
+
+def get_mentions():
+	#return api.mentions_timeline()[0].text
+	tweets = []
+	for a in api.mentions_timeline():
+		tweets.append((a.user.screen_name, a.text[9:]))
+	return tweets
