@@ -14,12 +14,14 @@ api = tweepy.API(auth)
 
 
 def get_previous():
-	with open("previous.txt", "r") as f:
-		a = f.readline()
-
-	print(a)
-	previous = ast.literal_eval(a)
-	return previous
+	try:
+		with open("previous.txt", "r") as f:
+			a = f.readline()
+		print(a)
+		previous = ast.literal_eval(a)
+		return previous
+	except FileNotFoundError:
+		return []
 
 def set_previous(aList):
 	f = open("previous.txt", "w")
