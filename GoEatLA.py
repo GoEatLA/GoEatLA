@@ -9,6 +9,8 @@ import requests
 import json
 
 class GoEatLA:
+
+	counter = 0
 	
 	def __init__(self, yelp, posttime = 30, readtime = 30):
 		self.yelp = yelp
@@ -23,11 +25,6 @@ class GoEatLA:
 	def makeTweets(self):
 		places = self.yelp.searchStuff(random.choice(self.subarea))
 		rng = random.randint(0, len(places) - 1)
-
-		# Python 2 only
-		# location = map(lambda x: x.encode('ascii'), places[rng]['location'])
-		# address = ' '.join(location)
-
 		address = ' '.join(places[rng]['location'])
 		name = places[rng]['name']
 		googlelink = self.goo_shorten_url(address)
@@ -38,16 +35,12 @@ class GoEatLA:
 
 		prev = tweeter.get_previous()
 		otherTweets = tweeter.get_mentions()
-		print("New:", otherTweets)
 		if len(prev) != 0:
 			simplifiedTweets = list(set(otherTweets) - set(prev))
 		else:
 			simplifiedTweets = otherTweets[:]
 
-		print("Previous:", prev)
-		print("now", simplifiedTweets)
-
-		print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+		print("New Tweets:", simplifiedTweets, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 		for person in simplifiedTweets:
 			places = self.yelp.searchStuff(random.choice(self.subarea), person[1])
@@ -57,7 +50,8 @@ class GoEatLA:
 			googlelink = self.goo_shorten_url(address)
 			replyTo = "@%s"% person[0]
 			try:
-				tweeter.updateMsg(replyTo + " " + name + " at " + googlelink)
+				tweeter.updateMsg(replyTo + " #" + str(self.counter) + " " + name + " at " + googlelink)
+				self.counter += 1
 			except tweeter.error.TweepyError as err:
 				print (err)
 
