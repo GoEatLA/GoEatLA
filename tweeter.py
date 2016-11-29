@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import tweepy
+import ast
 
 CONSUMER_KEY = "XqNwYplxMeHiDEl2iSNhKVB7J"
 CONSUMER_SECRET = "a4rtEW9M7E0AuxeGmpfisDf4aTrjUPhgT1yyGFVBnGgTFoJDXy"
@@ -14,11 +15,19 @@ api = tweepy.API(auth)
 previous = []
 
 def get_previous():
+	with open("previous.txt", "r") as f:
+		a = f.readline()
+
+	print(a)
+	previous = ast.literal_eval(a)
 	return previous
 
 def set_previous(aList):
 	global previous
 	previous = aList[:]
+	f = open("previous.txt", "w")
+	f.write(str(aList))
+	f.close()
 
 
 def updateMsg(tweet):
