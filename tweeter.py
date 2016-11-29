@@ -12,7 +12,6 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-previous = []
 
 def get_previous():
 	with open("previous.txt", "r") as f:
@@ -23,8 +22,6 @@ def get_previous():
 	return previous
 
 def set_previous(aList):
-	global previous
-	previous = aList[:]
 	f = open("previous.txt", "w")
 	f.write(str(aList))
 	f.close()
